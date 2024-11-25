@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({ hasGradient = false }) => {
         <CustomHeader className={hasGradient ? "is-gradient-sticky" : ""}>
             <Container maxWidth="xl">
                 <Typography
-                    variant="body2"
+                    variant="h6"
                     component="div"
                     sx={{
                         padding: "1rem 0",
@@ -21,6 +21,18 @@ const Header: React.FC<HeaderProps> = ({ hasGradient = false }) => {
                         height: "70px",
                     }}>
                     <Link href={"/"}>USER PANEL</Link>
+                    {/* {isAuthenticated && (
+                        <Button
+                            onClick={handleLogout}
+                            sx={{
+                                marginLeft: "auto",
+                                color: "Background",
+                                borderColor: "Background",
+                            }}
+                            variant="outlined">
+                            Log out
+                        </Button>
+                    )} */}
                 </Typography>
             </Container>
         </CustomHeader>
