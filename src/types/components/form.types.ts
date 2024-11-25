@@ -1,11 +1,11 @@
 import {
-    SubmitHandler,
     FieldValues,
     UseFormRegister,
     FieldError,
     FieldErrorsImpl,
 } from "react-hook-form";
 import * as z from "zod";
+import { ApiResponse } from "@/types/api.types";
 
 export type DynamicField = {
     name: string;
@@ -14,11 +14,28 @@ export type DynamicField = {
     validation: z.ZodTypeAny;
 };
 
+export interface MessagesType {
+    form: {
+        success: string;
+        error: string;
+    };
+
+    userLogin: { success: string; error: string };
+    userRegister: {
+        missingData: string;
+        emailExists: string;
+        creationError: string;
+        success: string;
+    };
+    // Добавьте другие формы по мере необходимости
+}
+
 export type FormProps<T extends FieldValues> = {
     title: string;
     description?: string;
     fields: DynamicField[];
-    onSubmit: SubmitHandler<T>;
+    formName: keyof MessagesType;
+    onSubmit: (data: T) => Promise<ApiResponse<{ message: string }>>;
 };
 
 export type FormFieldProps<T extends FieldValues> = {

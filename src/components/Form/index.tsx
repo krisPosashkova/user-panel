@@ -8,10 +8,16 @@ import { CusomForm } from "@/styles/components";
 import { FormProps } from "@/types/components/form.types";
 import FormField from "./FormField";
 import { createValidationSchema } from "@/utils/createValidationSchema";
+import { ApiResponse } from "@/types/api.types";
+import CustomSnackbars from "../CustomSnackbars";
+import { useSnackbarState } from "@/hooks/useSnackbarState";
+import { Messages } from "@/constants/messages";
+import { useRouter } from "next/navigation";
 
 const DynamicForm = <T extends FieldValues>({
     title,
     description,
+    formName,
     fields,
     onSubmit,
 }: FormProps<T>) => {
@@ -24,38 +30,63 @@ const DynamicForm = <T extends FieldValues>({
     } = useForm<T>({
         resolver: zodResolver(schema),
     });
+    const router = useRouter();
+
+    const { snackbarState, handleSnackbar } = useSnackbarState();
+
+    const handleFormSubmit = async (data: T) => {
+        const response: ApiResponse<{
+            message: string;
+            redirect?: string | undefined;
+        }> = await onSubmit(data);
+
+        console.log(response, "response");
+        if (response.success) {
+            if (response.redirect) {
+                router.push(response.redirect);
+                return;
+            }
+            handleSnackbar("success", Messages[formName].success);
+        } else {
+            handleSnackbar("error", response.message || Messages.form.error);
+        }
+    };
 
     return (
-        <CusomForm onSubmit={handleSubmit(onSubmit)}>
-            <Typography variant="h2" component="h1">
-                {title}
-            </Typography>
-
-            {description && (
-                <Typography variant="body1" color="text.secondary">
-                    {description}
+        <>
+            <CusomForm onSubmit={handleSubmit(handleFormSubmit)}>
+                <Typography variant="h2" component="h1">
+                    {title}
                 </Typography>
-            )}
 
-            {fields.map((field) => (
-                <FormField
-                    key={field.name}
-                    field={field}
-                    register={register}
-                    error={errors[field.name]}
-                />
-            ))}
+                {description && (
+                    <Typography variant="body1" color="text.secondary">
+                        {description}
+                    </Typography>
+                )}
 
-            <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                    padding: "1rem",
-                }}
-                disabled={isSubmitting}>
-                {title}
-            </Button>
-        </CusomForm>
+                {fields.map((field) => (
+                    <FormField
+                        key={field.name}
+                        field={field}
+                        register={register}
+                        error={errors[field.name]}
+                    />
+                ))}
+
+                <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                        padding: "1rem",
+                    }}
+                    disabled={isSubmitting}>
+                    {title}
+                </Button>
+            </CusomForm>
+
+            <CustomSnackbars {...snackbarState} />
+        </>
     );
 };
 

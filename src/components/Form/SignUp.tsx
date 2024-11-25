@@ -2,13 +2,7 @@ import React from "react";
 import { signUpFields } from "./formFieldConfig";
 import DynamicForm from "./index";
 
-const handleSignUp = (data: {
-    name: string;
-    email: string;
-    password: string;
-}) => {
-    console.log("Sign Up Data info:", data);
-};
+import { handleRegister } from "@/utils/api";
 
 const FormSignUp = () => {
     return (
@@ -16,7 +10,8 @@ const FormSignUp = () => {
             title="Sign Up"
             description="Create your account"
             fields={signUpFields}
-            onSubmit={handleSignUp}
+            onSubmit={handleRegister}
+            formName="userRegister"
         />
     );
 };
