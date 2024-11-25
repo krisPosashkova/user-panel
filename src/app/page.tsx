@@ -1,8 +1,8 @@
-"use client";
-
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
+import UserTable from "@/components/Table";
 import { Box, Container, Typography } from "@mui/material";
-import Link from "next/link";
+import Profile from "@/components/Profile";
 
 export default function Home() {
     return (
@@ -13,14 +13,14 @@ export default function Home() {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        gap: "1rem",
-                        mt: 3,
+                        gap: 6,
+                        mt: 10,
                     }}>
+                    <Profile />
                     <Typography variant="h1" component="h1">
-                        Grid Data Table
+                        List of users
                     </Typography>
-                    <Link href="/signin">Sign in</Link>
-                    <Link href="/signup">Sign up</Link>
+                    <UserTable />
                 </Box>
             </Container>
         </div>
