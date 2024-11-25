@@ -4,7 +4,7 @@ export const theme = createTheme({
     palette: {
         background: {
             default: "#f5f5f5",
-            paper: "#c5c5c5",
+            paper: "#eeeeee",
         },
         text: {
             primary: "#202020",
@@ -38,12 +38,7 @@ export const theme = createTheme({
             fontWeight: 400,
             lineHeight: 1.3,
         },
-        body2: {
-            fontFamily: "var(--font-secondary)",
-            fontSize: "clamp(1rem, 1.5vw + 0.5rem, 1.5rem)",
-            fontWeight: 600,
-            lineHeight: 1.3,
-        },
+
         h1: {
             fontSize: "clamp(1.5rem, 2vw + 1rem, 3.5rem)",
             fontWeight: 700,
@@ -60,6 +55,13 @@ export const theme = createTheme({
             lineHeight: 1.3,
         },
         h4: {
+            fontSize: "clamp(1rem, 1.5vw + 0.5rem, 1.5rem)",
+            fontWeight: 600,
+            lineHeight: 1.3,
+        },
+
+        h6: {
+            fontFamily: "var(--font-secondary)",
             fontSize: "clamp(1rem, 1.5vw + 0.5rem, 1.5rem)",
             fontWeight: 600,
             lineHeight: 1.3,
