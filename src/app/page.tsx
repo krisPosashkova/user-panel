@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Header from "@/components/Header";
 import UserTable from "@/components/Table";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, Divider } from "@mui/material";
 import Profile from "@/components/Profile";
 
 export default function Home() {
@@ -17,7 +17,8 @@ export default function Home() {
                         mt: 10,
                     }}>
                     <Profile />
-                    <Typography variant="h1" component="h1">
+                    <Divider component="div" role="presentation"></Divider>
+                    <Typography variant="h6" component="h1">
                         List of users
                     </Typography>
                     <UserTable />
