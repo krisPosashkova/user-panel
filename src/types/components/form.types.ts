@@ -1,3 +1,5 @@
+import { MessagesKeysWithSuccess } from "./messages.types";
+
 import {
     FieldValues,
     UseFormRegister,
@@ -14,27 +16,11 @@ export type DynamicField = {
     validation: z.ZodTypeAny;
 };
 
-export interface MessagesType {
-    form: {
-        success: string;
-        error: string;
-    };
-
-    userLogin: { success: string; error: string };
-    userRegister: {
-        missingData: string;
-        emailExists: string;
-        creationError: string;
-        success: string;
-    };
-    // Добавьте другие формы по мере необходимости
-}
-
 export type FormProps<T extends FieldValues> = {
     title: string;
     description?: string;
     fields: DynamicField[];
-    formName: keyof MessagesType;
+    formName: MessagesKeysWithSuccess;
     onSubmit: (data: T) => Promise<ApiResponse<{ message: string }>>;
 };
 

@@ -12,7 +12,6 @@ import { ApiResponse } from "@/types/api.types";
 import CustomSnackbars from "../CustomSnackbars";
 import { useSnackbarState } from "@/hooks/useSnackbarState";
 import { Messages } from "@/constants/messages";
-import { useRouter } from "next/navigation";
 
 const DynamicForm = <T extends FieldValues>({
     title,
@@ -30,7 +29,6 @@ const DynamicForm = <T extends FieldValues>({
     } = useForm<T>({
         resolver: zodResolver(schema),
     });
-    const router = useRouter();
 
     const { snackbarState, handleSnackbar } = useSnackbarState();
 
@@ -40,12 +38,9 @@ const DynamicForm = <T extends FieldValues>({
             redirect?: string | undefined;
         }> = await onSubmit(data);
 
-        console.log(response, "response");
+        if (response?.redirect) return;
+
         if (response.success) {
-            if (response.redirect) {
-                router.push(response.redirect);
-                return;
-            }
             handleSnackbar("success", Messages[formName].success);
         } else {
             handleSnackbar("error", response.message || Messages.form.error);

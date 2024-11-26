@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { connectToDatabase } from "@/lib/db";
+import { redirectToUrl } from "@/utils/server";
 
 // To do: вынести в Messages, доработать/попробовать другие подключения при необходимости
 
@@ -35,12 +36,10 @@ export async function POST(req: Request) {
             [name, email, hashedPassword, status]
         );
 
-        return NextResponse.json(
-            {
-                redirect: "/signin?successRegister=true",
-            },
-            { status: 201 }
-        );
+        const redirectUrl =
+            "/signin?messages=userSuccessRegister&severity=success";
+        const message = "Пользователь зарегистрирован";
+        return redirectToUrl(redirectUrl, message);
     } catch (error) {
         console.error("Error creating user.", error);
         return NextResponse.json(

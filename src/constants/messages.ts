@@ -1,4 +1,4 @@
-import { MessagesType } from "@/types/components/form.types";
+import { MessagesType, MessagesKeys } from "@/types/components/messages.types";
 
 // To do: дорабоать сообщения
 
@@ -18,4 +18,11 @@ export const Messages: MessagesType = {
         success: "Login successful!",
         error: "There was an error login",
     },
+
+    userBlock: "Your account has been blocked",
+    userSuccessLogin: "Successful account login",
+    userSuccessRegister: "Registration successful! Please Sign In.",
 };
+export function isValidMessagesKey(key: string): key is MessagesKeys {
+    return key in Messages;
+}
