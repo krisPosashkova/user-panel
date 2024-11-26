@@ -44,7 +44,10 @@ export async function GET() {
             );
         }
 
-        return NextResponse.json(res.rows[0], { status: 200 });
+        return NextResponse.json(
+            { ...res.rows[0], isAuth: true },
+            { status: 200 }
+        );
     } catch (error) {
         console.error("Ошибка:", error);
         return NextResponse.json(

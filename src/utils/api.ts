@@ -87,3 +87,7 @@ export const handleDeleteUsers = async (selectedUsers: number[]) => {
         userIds: selectedUsers,
     });
 };
+
+export const handleLogout = async () => {
+    return apiRequest("/api/logout", "POST");
+};

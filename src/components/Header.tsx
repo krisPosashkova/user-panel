@@ -1,13 +1,25 @@
+"use client";
 import React from "react";
-import { Typography, Container } from "@mui/material";
+import { Typography, Container, Button } from "@mui/material";
 import Link from "next/link";
 import { CustomHeader } from "@/styles/components";
+import { useProfileStore } from "@/store/profileStore";
+import { handleLogout as onLogout } from "@/utils/api";
 
 interface HeaderProps {
     hasGradient?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ hasGradient = false }) => {
+    const { profile, clearProfile } = useProfileStore();
+
+    const isAuthenticated = profile?.isAuth ?? false;
+
+    const handleLogout = async () => {
+        clearProfile();
+        await onLogout();
+    };
+
     return (
         <CustomHeader className={hasGradient ? "is-gradient-sticky" : ""}>
             <Container maxWidth="xl">
@@ -21,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ hasGradient = false }) => {
                         height: "70px",
                     }}>
                     <Link href={"/"}>USER PANEL</Link>
-                    {/* {isAuthenticated && (
+                    {isAuthenticated && (
                         <Button
                             onClick={handleLogout}
                             sx={{
@@ -32,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ hasGradient = false }) => {
                             variant="outlined">
                             Log out
                         </Button>
-                    )} */}
+                    )}
                 </Typography>
             </Container>
         </CustomHeader>
