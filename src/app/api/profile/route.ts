@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { connectToDatabase } from "@/lib/db";
 import { headers } from "next/headers";
+import { Messages } from "@/constants/messages";
 
 // To do: вынести в Messages, доработать
 
@@ -13,7 +14,7 @@ export async function GET() {
 
         if (!token) {
             return NextResponse.json(
-                { message: "Не авторизован" },
+                { message: Messages.notAuthorized },
                 { status: 401 }
             );
         }
@@ -25,20 +26,20 @@ export async function GET() {
 
         if (!decoded || typeof decoded !== "object" || !decoded.email) {
             return NextResponse.json(
-                { message: "Недействительный токен" },
+                { message: Messages.invalidToken },
                 { status: 401 }
             );
         }
 
         const dbClient = await connectToDatabase();
         const res = await dbClient.query(
-            "SELECT id, name, email, status FROM public.users WHERE email = $1",
+            "SELECT id, name, email FROM public.users WHERE email = $1",
             [decoded.email]
         );
 
         if (res.rows.length === 0) {
             return NextResponse.json(
-                { message: "Пользователь не найден" },
+                { message: Messages.notFoundUser },
                 { status: 404 }
             );
         }
@@ -47,7 +48,7 @@ export async function GET() {
     } catch (error) {
         console.error("Ошибка:", error);
         return NextResponse.json(
-            { message: "Ошибка сервера" },
+            { message: Messages.errorServer },
             { status: 500 }
         );
     }

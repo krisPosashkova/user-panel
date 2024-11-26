@@ -19,6 +19,15 @@ export const Messages: MessagesType = {
         error: "There was an error login",
     },
 
+    profile: {
+        error: "Error loading the profile",
+    },
+
+    notAuthorized: "Not authorized",
+    invalidToken: "Invalid token",
+    errorServer: "Server error",
+    notFoundUser: "The user was not found",
+
     userBlock: "Your account has been blocked",
     userSuccessLogin: "Successful account login",
     userSuccessRegister: "Registration successful! Please Sign In.",

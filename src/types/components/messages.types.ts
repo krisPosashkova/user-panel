@@ -13,6 +13,15 @@ export interface MessagesType {
         creationError: string;
         success: string;
     };
+
+    profile: {
+        error: string;
+    };
+
+    errorServer: string;
+    notAuthorized: string;
+    invalidToken: string;
+    notFoundUser: string;
 }
 
 export type MessagesKeys = keyof MessagesType;

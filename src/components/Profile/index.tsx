@@ -1,7 +1,7 @@
-// "use server";
 import React from "react";
 import { cookies } from "next/headers";
-import { Typography, Box } from "@mui/material";
+import ProfileDetails from "./ProfileDetails";
+import { Messages } from "@/constants/messages";
 
 export default async function Profile() {
     const cookie = await cookies();
@@ -26,20 +26,10 @@ export default async function Profile() {
         }
 
         const profile = await profileFetch.json();
-        console.log(profile);
 
-        return (
-            <Box>
-                <Typography variant="h6">User Profile</Typography>
-                <Typography>Name: {profile.name}</Typography>
-                <Typography>Email: {profile.email}</Typography>
-                <Typography>
-                    Status: {profile.status ? `Active` : `Block`}
-                </Typography>
-            </Box>
-        );
+        return <ProfileDetails profile={profile} />;
     } catch (error) {
-        console.error("Ошибка при загрузке профиля:", error);
-        return <p>Не удалось загрузить профиль.</p>;
+        console.error(Messages.profile.error, error);
+        return <p>{Messages?.profile?.error}</p>;
     }
 }
