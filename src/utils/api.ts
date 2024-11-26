@@ -15,19 +15,33 @@ export const apiRequest = async <T, R extends ApiResponseBase>(
             body: data ? JSON.stringify(data) : undefined,
         });
 
+        // console.log(response, "api");
+
+        if (response.redirected) {
+            const redirectUrl = response.url;
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
+
+            return {
+                success: false,
+                redirect: true,
+                message: "Redirect",
+            };
+        }
+
         const result: R = await response.json();
 
         if (response.ok) {
             return {
                 success: true,
                 data: result,
-                ...(result.redirect ? { redirect: result.redirect } : {}),
+                message: result.message || "Операция выполнена успешно",
             };
         } else {
             return {
                 success: false,
                 message: result.message || "Что-то пошло не так",
-                ...(result.redirect ? { redirect: result.redirect } : {}),
             };
         }
     } catch (error) {
@@ -39,16 +53,37 @@ export const apiRequest = async <T, R extends ApiResponseBase>(
 export const handleRegister = async (
     data: SignUpData
 ): Promise<ApiResponse<{ message: string }>> => {
-    return apiRequest<
-        SignUpData,
-        { message: string; redirect?: string | undefined }
-    >("/api/register", "POST", data);
+    return apiRequest<SignUpData, { message: string; redirect?: boolean }>(
+        "/api/register",
+        "POST",
+        data
+    );
 };
+
 export const handleLogin = async (
     data: SignInData
 ): Promise<ApiResponse<{ message: string }>> => {
-    return apiRequest<
-        SignInData,
-        { message: string; redirect?: string | undefined }
-    >("/api/login", "POST", data);
+    return apiRequest<SignInData, { message: string; redirect?: boolean }>(
+        "/api/login",
+        "POST",
+        data
+    );
+};
+
+export const handleBlockUsers = async (selectedUsers: number[]) => {
+    return apiRequest("/api/users/block", "PATCH", {
+        userIds: selectedUsers,
+    });
+};
+
+export const handleUnblockUsers = async (selectedUsers: number[]) => {
+    return apiRequest("/api/users/unblock", "PATCH", {
+        userIds: selectedUsers,
+    });
+};
+
+export const handleDeleteUsers = async (selectedUsers: number[]) => {
+    return apiRequest("/api/users/delete", "DELETE", {
+        userIds: selectedUsers,
+    });
 };

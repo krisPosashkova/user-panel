@@ -1,18 +1,19 @@
 export interface ApiResponseBase {
-    message?: string;
-    redirect?: string | undefined;
+    message: string;
+    redirect?: boolean;
 }
 
 export interface SuccessResponse<T> {
     success: true;
     data: T;
-    redirect?: string | undefined;
+    redirect?: boolean;
+    message: string;
 }
 
 export interface ErrorResponse {
     success: false;
     message: string;
-    redirect?: string | undefined;
+    redirect?: boolean;
 }
 
 export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
