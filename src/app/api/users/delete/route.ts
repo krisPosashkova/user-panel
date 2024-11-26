@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { validateRequest } from "@/utils/server";
+import { Messages } from "@/constants/messages";
 
 export async function DELETE(request: Request) {
     const client = await connectToDatabase();
@@ -16,19 +17,19 @@ export async function DELETE(request: Request) {
 
         if (result.rowCount === 0) {
             return NextResponse.json(
-                { message: "Пользователи не найдены" },
+                { message: Messages.notFoundUser },
                 { status: 404 }
             );
         }
 
         return NextResponse.json(
-            { message: "Пользователи удалены", users: result.rows },
+            { message: Messages.succesDeleteUsers, users: result.rows },
             { status: 200 }
         );
     } catch (error) {
-        console.error("Ошибка при удалении пользователей:", error);
+        console.error(Messages.errorDeleteUser, error);
         return NextResponse.json(
-            { message: "Ошибка при удалении пользователей" },
+            { message: Messages.errorDeleteUser },
             { status: 500 }
         );
     }

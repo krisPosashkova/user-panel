@@ -1,4 +1,4 @@
-import { User } from "@/types/components/table.types";
+import { User } from "@/types/api.types";
 
 export const createRows = (
     usersData: Array<{

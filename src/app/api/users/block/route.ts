@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { validateRequest } from "@/utils/server";
+import { Messages } from "@/constants/messages";
 
 export async function PATCH(request: Request) {
     const client = await connectToDatabase();
@@ -22,22 +23,22 @@ export async function PATCH(request: Request) {
 
         if (result.rowCount === 0) {
             return NextResponse.json(
-                { message: "Пользователи не найдены" },
+                { message: Messages.notFoundUser },
                 { status: 404 }
             );
         }
 
         return NextResponse.json(
             {
-                message: "Пользователи успешно заблокированы",
+                message: Messages.successBlockUsers,
                 users: result.rows,
             },
             { status: 200 }
         );
     } catch {
-        console.error("Ошибка при блокировке пользователей:");
+        console.error(Messages.errorBlockUsers);
         return NextResponse.json(
-            { message: "Ошибка при блокировке пользователей" },
+            { message: Messages.errorBlockUsers },
             { status: 500 }
         );
     }

@@ -2,15 +2,14 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { connectToDatabase } from "@/lib/db";
 import { redirectToUrl } from "@/utils/server";
-
-// To do: вынести в Messages, доработать/попробовать другие подключения при необходимости
+import { Messages } from "@/constants/messages";
 
 export async function POST(req: Request) {
     const { name, email, password, status = true } = await req.json();
 
     if (!name || !email || !password) {
         return NextResponse.json(
-            { message: "Please provide all required fields." },
+            { message: Messages.requiredFields },
             { status: 400 }
         );
     }
@@ -24,7 +23,7 @@ export async function POST(req: Request) {
 
         if (existingUser.length > 0) {
             return NextResponse.json(
-                { message: "Email already exists." },
+                { message: Messages.emailExists },
                 { status: 400 }
             );
         }
@@ -38,12 +37,12 @@ export async function POST(req: Request) {
 
         const redirectUrl =
             "/signin?messages=userSuccessRegister&severity=success";
-        const message = "Пользователь зарегистрирован";
+        const message = Messages.userSuccessRegister;
         return redirectToUrl(redirectUrl, message);
     } catch (error) {
-        console.error("Error creating user.", error);
+        console.error(Messages.errorCreationUser, error);
         return NextResponse.json(
-            { message: "Error creating user." },
+            { message: Messages.errorCreationUser },
             { status: 500 }
         );
     }

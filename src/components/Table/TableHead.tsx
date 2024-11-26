@@ -10,7 +10,8 @@ import {
     Box,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
-import { TableProps, User, HeadCell } from "@/types/components/table.types";
+import { TableProps, HeadCell } from "@/types/components/table.types";
+import { User } from "@/types/api.types";
 
 const headCells: readonly HeadCell[] = [
     { id: "name", numeric: false, disablePadding: true, label: "Name" },

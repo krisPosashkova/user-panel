@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { redirectToUrl } from "@/utils/server";
-
-// To do: вынести в Messages, доработать
+import { Messages } from "@/constants/messages";
 
 export async function POST(request: Request) {
     try {
@@ -13,7 +12,7 @@ export async function POST(request: Request) {
 
         if (!email || !password) {
             return NextResponse.json(
-                { message: "Email и пароль обязательны" },
+                { message: Messages.requiredEmailPassword },
                 { status: 400 }
             );
         }
@@ -27,7 +26,7 @@ export async function POST(request: Request) {
 
         if (res.rows.length === 0) {
             return NextResponse.json(
-                { message: "Пользователь с таким email не найден" },
+                { message: Messages.notFoundEmailUser },
                 { status: 400 }
             );
         }
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
         const user = res.rows[0];
         if (user.status === false) {
             return NextResponse.json(
-                { message: "Ваш аккаунт заблокирован" },
+                { message: Messages.userBlock },
                 { status: 403 }
             );
         }
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
 
         if (!isPasswordValid) {
             return NextResponse.json(
-                { message: "Неверный пароль" },
+                { message: Messages.invalidPassword },
                 { status: 400 }
             );
         }
@@ -74,12 +73,12 @@ export async function POST(request: Request) {
         }
 
         const redirectUrl = "/?messages=userSuccessLogin&severity=success";
-        const message = "Пользователь авторизован";
+        const message = Messages.userSuccessLogin;
         return redirectToUrl(redirectUrl, message);
     } catch (error) {
-        console.error("Ошибка входа:", error);
+        console.error(Messages.userErrorLogin, error);
         return NextResponse.json(
-            { message: "Не удалось выполнить вход" },
+            { message: Messages.userErrorLogin },
             { status: 500 }
         );
     }

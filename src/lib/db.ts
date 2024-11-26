@@ -1,8 +1,7 @@
+import { Messages } from "@/constants/messages";
 import { Client } from "pg";
 
 let client: Client | null = null;
-
-// To do: вынести в Messages, доработать/попробовать другие подключения при необходимости
 
 export const connectToDatabase = async (): Promise<Client> => {
     if (client) return client;
@@ -20,11 +19,11 @@ export const connectToDatabase = async (): Promise<Client> => {
 
     try {
         await client.connect();
-        console.log("Подключение к базе данных успешно!");
+        console.log(Messages.successConectsDB);
         return client;
     } catch (error) {
-        console.error("Ошибка при подключении к базе данных:", error);
-        throw new Error("Не удалось подключиться к базе данных");
+        console.error(Messages.errorConnectDB, error);
+        throw new Error(Messages.errorConnectDB);
     }
 };
 

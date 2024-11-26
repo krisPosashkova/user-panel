@@ -1,4 +1,5 @@
-import { Order, User } from "@/types/components/table.types";
+import { Order } from "@/types/components/table.types";
+import { User } from "@/types/api.types";
 
 export function descendingComparator<Key extends keyof User>(
     a: User,

@@ -1,6 +1,6 @@
 "use client";
 import { Typography, Box } from "@mui/material";
-import { Profile } from "@/types/components/table.types";
+import { Profile } from "@/types/api.types";
 import { useProfileStore } from "@/store/profileStore";
 import { useEffect } from "react";
 

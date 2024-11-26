@@ -18,9 +18,23 @@ export interface ErrorResponse {
 
 export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
 
-export interface UserProfile {
-    id: string;
-    name: string;
+export type ActionType = "delete" | "block" | "unblock";
+
+export interface SignInData {
     email: string;
-    status: string;
+    password?: string;
+}
+
+export interface SignUpData extends SignInData {
+    name: string;
+}
+
+export interface Profile extends SignUpData {
+    isAuth: boolean;
+}
+
+export interface User extends SignUpData {
+    id: number;
+    last_login: string;
+    status: boolean;
 }

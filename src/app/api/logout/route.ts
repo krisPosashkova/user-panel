@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { redirectToUrl } from "@/utils/server";
-
-// To do: вынести в Messages, доработать
+import { Messages } from "@/constants/messages";
 
 export async function POST(request: Request) {
     try {
@@ -10,12 +9,12 @@ export async function POST(request: Request) {
         cookieStore.delete("token");
 
         const redirectUrl = "/signin";
-        const message = "Пользователь вышел из системы";
+        const message = Messages.userLoggedOut;
         return redirectToUrl(redirectUrl, message);
     } catch (error) {
-        console.error("Ошибка выхода:", error);
+        console.error(Messages.userErrorLoggedOut, error);
         return NextResponse.json(
-            { message: "Не удалось выполнить выход" },
+            { message: Messages.userErrorLoggedOut },
             { status: 500 }
         );
     }

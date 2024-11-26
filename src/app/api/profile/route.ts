@@ -4,8 +4,6 @@ import { connectToDatabase } from "@/lib/db";
 import { headers } from "next/headers";
 import { Messages } from "@/constants/messages";
 
-// To do: вынести в Messages, доработать
-
 export async function GET() {
     try {
         const headersValue = await headers();
@@ -49,7 +47,7 @@ export async function GET() {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Ошибка:", error);
+        console.error(Messages.errorServer, error);
         return NextResponse.json(
             { message: Messages.errorServer },
             { status: 500 }

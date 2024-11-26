@@ -1,5 +1,3 @@
-import { MessagesKeysWithSuccess } from "./messages.types";
-
 import {
     FieldValues,
     UseFormRegister,
@@ -20,7 +18,6 @@ export type FormProps<T extends FieldValues> = {
     title: string;
     description?: string;
     fields: DynamicField[];
-    formName: MessagesKeysWithSuccess;
     onSubmit: (data: T) => Promise<ApiResponse<{ message: string }>>;
 };
 

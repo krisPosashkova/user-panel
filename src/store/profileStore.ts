@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Profile } from "@/types/components/table.types";
+import { Profile } from "@/types/api.types";
 
 interface ProfileState {
     profile: Profile | null;

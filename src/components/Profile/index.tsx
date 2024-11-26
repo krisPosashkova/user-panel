@@ -21,7 +21,7 @@ export default async function Profile() {
 
         if (!profileFetch.ok) {
             throw new Error(
-                `Ошибка при получении профиля: ${profileFetch.statusText}`
+                `${Messages.errorGetProfile} ${profileFetch.statusText}`
             );
         }
 

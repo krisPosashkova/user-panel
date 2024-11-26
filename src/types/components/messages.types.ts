@@ -3,25 +3,44 @@ export interface MessagesType {
         success: string;
         error: string;
     };
-    userBlock: string;
-    userSuccessLogin: string;
-    userSuccessRegister: string;
-    userLogin: { success: string; error: string };
-    userRegister: {
-        missingData: string;
-        emailExists: string;
-        creationError: string;
-        success: string;
-    };
 
     profile: {
         error: string;
     };
 
+    redirect: string;
+
+    successConectsDB: string;
+    errorConnectDB: string;
+    errorGetProfile: string;
+
     errorServer: string;
     notAuthorized: string;
     invalidToken: string;
     notFoundUser: string;
+    invalidPassword: string;
+    userErrorLogin: string;
+    userBlock: string;
+    userSuccessLogin: string;
+    userSuccessRegister: string;
+    requiredEmailPassword: string;
+    requiredFields: string;
+    notFoundEmailUser: string;
+    userLoggedOut: string;
+    userErrorLoggedOut: string;
+    emailExists: string;
+    errorCreationUser: string;
+    successBlockUsers: string;
+    errorBlockUsers: string;
+    succesDeleteUsers: string;
+    errorDeleteUser: string;
+    successUnblockUser: string;
+    errorUnblockUser: string;
+    errorGetListUsers: string;
+    errorDecoded: string;
+    notIDUsers: string;
+    success: string;
+    error: string;
 }
 
 export type MessagesKeys = keyof MessagesType;

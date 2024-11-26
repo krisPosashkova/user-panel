@@ -1,5 +1,6 @@
-import { SignUpData, SignInData } from "@/types/components/table.types";
+import { SignUpData, SignInData } from "@/types/api.types";
 import { ApiResponse, ApiResponseBase } from "@/types/api.types";
+import { Messages } from "@/constants/messages";
 
 export const apiRequest = async <T, R extends ApiResponseBase>(
     url: string,
@@ -15,8 +16,6 @@ export const apiRequest = async <T, R extends ApiResponseBase>(
             body: data ? JSON.stringify(data) : undefined,
         });
 
-        // console.log(response, "api");
-
         if (response.redirected) {
             const redirectUrl = response.url;
             if (redirectUrl) {
@@ -26,7 +25,7 @@ export const apiRequest = async <T, R extends ApiResponseBase>(
             return {
                 success: false,
                 redirect: true,
-                message: "Redirect",
+                message: Messages.redirect,
             };
         }
 
@@ -36,17 +35,17 @@ export const apiRequest = async <T, R extends ApiResponseBase>(
             return {
                 success: true,
                 data: result,
-                message: result.message || "Операция выполнена успешно",
+                message: result.message || Messages.success,
             };
         } else {
             return {
                 success: false,
-                message: result.message || "Что-то пошло не так",
+                message: result.message || Messages.error,
             };
         }
     } catch (error) {
-        console.error("Ошибка при отправке данных:", error);
-        return { success: false, message: "Ошибка сервера" };
+        console.error(Messages.errorServer, error);
+        return { success: false, message: Messages.errorServer };
     }
 };
 

@@ -16,7 +16,6 @@ import { Messages } from "@/constants/messages";
 const DynamicForm = <T extends FieldValues>({
     title,
     description,
-    formName,
     fields,
     onSubmit,
 }: FormProps<T>) => {
@@ -41,7 +40,10 @@ const DynamicForm = <T extends FieldValues>({
         if (response?.redirect) return;
 
         if (response.success) {
-            handleSnackbar("success", Messages[formName].success);
+            handleSnackbar(
+                "success",
+                response.message || Messages.form.success
+            );
         } else {
             handleSnackbar("error", response.message || Messages.form.error);
         }

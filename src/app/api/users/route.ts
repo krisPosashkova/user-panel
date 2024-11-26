@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
-
-// To do: вынести в Messages, доработать/попробовать другие подключения при необходимости
+import { Messages } from "@/constants/messages";
 
 export async function GET() {
     const client = await connectToDatabase();
@@ -11,9 +10,9 @@ export async function GET() {
         console.log(rows);
         return NextResponse.json(rows, { status: 200 });
     } catch (error) {
-        console.error("Ошибка при получении пользователей:", error);
+        console.error(Messages.errorGetListUsers, error);
         return NextResponse.json(
-            { message: "Ошибка при получении пользователей" },
+            { message: Messages.errorGetListUsers },
             { status: 500 }
         );
     }

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { User, Order, ActionType } from "@/types/components/table.types";
+import { Order } from "@/types/components/table.types";
+import { ActionType } from "@/types/api.types";
+import { User } from "@/types/api.types";
 import { getComparator } from "@/utils/sorting";
 import { createRows } from "@/utils/createRows";
 import {

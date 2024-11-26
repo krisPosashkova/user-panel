@@ -11,7 +11,6 @@ const FormSignUp = () => {
             description="Create your account"
             fields={signUpFields}
             onSubmit={handleRegister}
-            formName="userRegister"
         />
     );
 };

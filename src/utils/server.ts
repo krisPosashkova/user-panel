@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { Client } from "pg";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { Messages } from "@/constants/messages";
 
 interface DecodedToken extends JwtPayload {
     userId: number;
@@ -26,7 +27,7 @@ export async function getTokenOrRedirect(): Promise<string | NextResponse> {
 
     if (!token) {
         const redirectUrl = "/signin";
-        const message = "Пользователь не авторизован, редирект на /signin";
+        const message = Messages.notAuthorized;
         return redirectToUrl(redirectUrl, message);
     }
 
@@ -43,7 +44,7 @@ export function decodeToken(token: string): DecodedToken | null {
 
         return decoded;
     } catch (error) {
-        console.error("Ошибка при декодировании токена:", error);
+        console.error(Messages.errorDecoded, error);
         return null;
     }
 }
@@ -56,7 +57,7 @@ export async function checkUserStatus(client: Client, userId: number) {
 
     if (userRes.rows.length === 0 || userRes.rows[0].status === false) {
         const redirectUrl = "/signin?messages=userBlock&severity=error";
-        const message = "Пользователь не авторизован, редирект на /signin";
+        const message = Messages.notAuthorized;
 
         return redirectToUrl(redirectUrl, message);
     }
@@ -71,7 +72,7 @@ export async function getDecodedToken(): Promise<DecodedToken | NextResponse> {
     const decoded = decodeToken(token);
     if (!decoded) {
         return NextResponse.json(
-            { message: "Не удалось декодировать токен" },
+            { message: Messages.errorDecoded },
             { status: 400 }
         );
     }

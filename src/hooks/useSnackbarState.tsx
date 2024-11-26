@@ -48,7 +48,7 @@ export function useSnackbarState() {
 
         const updatedUrl =
             newSearchParams.toString() === ""
-                ? window.location.pathname // Если параметры пусты, оставляем только путь
+                ? window.location.pathname
                 : `${window.location.pathname}?${newSearchParams.toString()}`;
 
         window.history.replaceState(null, "", updatedUrl);
