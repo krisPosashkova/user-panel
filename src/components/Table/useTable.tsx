@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
-import { User, Order } from "@/types/components/table.types";
+import { User, Order, ActionType } from "@/types/components/table.types";
 import { getComparator } from "@/utils/sorting";
 import { createRows } from "@/utils/createRows";
-
+import {
+    handleBlockUsers as blockUser,
+    handleDeleteUsers as deteteUser,
+    handleUnblockUsers as unblockUser,
+} from "@/utils/api";
+import { useSnackbarState } from "@/hooks/useSnackbarState";
 const useTable = () => {
     const [order, setOrder] = useState<Order>("asc");
     const [orderBy, setOrderBy] = useState<keyof User>("name");
@@ -12,6 +17,10 @@ const useTable = () => {
     const [rows, setRows] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [loadingUsers, setLoadingUsers] = useState<Record<number, boolean>>(
+        {}
+    );
+    const { snackbarState, handleSnackbar } = useSnackbarState();
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -26,18 +35,14 @@ const useTable = () => {
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Ошибка: ${response.statusText}`);
+                    throw new Error(`Error: ${response.statusText}`);
                 }
 
                 const data: User[] = await response.json();
                 console.log(data);
                 setRows(createRows(data));
             } catch (err: unknown) {
-                setError(
-                    err instanceof Error
-                        ? err.message
-                        : "Неизвестная ошибка при загрузке данных."
-                );
+                setError(err instanceof Error ? err.message : "Unknown error");
             } finally {
                 setLoading(false);
             }
@@ -96,17 +101,92 @@ const useTable = () => {
         setPage(0);
     };
 
-    const handleDeleteUsers = (selected: (string | number)[]) => {
-        console.log("Deleting users:", selected);
+    const actionHandlers = {
+        delete: async (selected: number[]) => {
+            const response = await deteteUser(selected);
+            if (response?.success) {
+                setRows((prevRows) =>
+                    prevRows.filter((row) => !selected.includes(row.id))
+                );
+            }
+            return response;
+        },
+        block: async (selected: number[]) => {
+            const response = await blockUser(selected);
+            if (response?.success) {
+                setRows((prevRows) =>
+                    prevRows.map((row) =>
+                        selected.includes(row.id)
+                            ? { ...row, status: false }
+                            : row
+                    )
+                );
+            }
+            return response;
+        },
+        unblock: async (selected: number[]) => {
+            const response = await unblockUser(selected);
+            if (response?.success) {
+                setRows((prevRows) =>
+                    prevRows.map((row) =>
+                        selected.includes(row.id)
+                            ? { ...row, status: true }
+                            : row
+                    )
+                );
+            }
+            return response;
+        },
     };
 
-    const handleBlockUsers = (selected: (string | number)[]) => {
-        console.log("Blocking users:", selected);
+    const handleAction = async (selected: number[], action: ActionType) => {
+        setLoadingUsers((prevState) => ({
+            ...prevState,
+            ...selected.reduce(
+                (acc, userId) => ({ ...acc, [userId]: true }),
+                {}
+            ),
+        }));
+
+        try {
+            const response = await actionHandlers[action]?.(selected);
+
+            if (response && response.success) {
+                setSelected([]);
+                handleSnackbar(
+                    "success",
+                    response.message || `${action} completed successfully`
+                );
+            } else {
+                if (response?.redirect) return;
+
+                handleSnackbar(
+                    "error",
+                    response?.message || `Error when ${action}`
+                );
+            }
+        } catch (err) {
+            handleSnackbar(
+                "error",
+                err instanceof Error ? err.message : "Unknown error"
+            );
+        } finally {
+            setLoadingUsers((prevState) => ({
+                ...prevState,
+                ...selected.reduce(
+                    (acc, userId) => ({ ...acc, [userId]: false }),
+                    {}
+                ),
+            }));
+        }
     };
 
-    const handleUnblockUsers = (selected: (string | number)[]) => {
-        console.log("Unblocking users:", selected);
-    };
+    const handleDeleteUsers = (selected: number[]) =>
+        handleAction(selected, "delete");
+    const handleBlockUsers = (selected: number[]) =>
+        handleAction(selected, "block");
+    const handleUnblockUsers = (selected: number[]) =>
+        handleAction(selected, "unblock");
 
     const emptyRows =
         rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -124,6 +204,8 @@ const useTable = () => {
         rowsPerPage,
         loading,
         error,
+        snackbarState,
+        loadingUsers,
         handleBlockUsers,
         handleChangePage,
         handleChangeRowsPerPage,

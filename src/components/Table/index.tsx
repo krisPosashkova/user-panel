@@ -9,11 +9,14 @@ import {
     TableRow,
     Paper,
     Checkbox,
+    CircularProgress,
+    Skeleton,
 } from "@mui/material";
 
 import useTable from "./useTable";
 import UserTableHead from "./TableHead";
 import UserTableToolbar from "./TableToolbar";
+import CustomSnackbars from "../CustomSnackbars";
 
 export default function EnhancedTable() {
     const {
@@ -25,6 +28,8 @@ export default function EnhancedTable() {
         handleDeleteUsers,
         handleSelectAllClick,
         handleUnblockUsers,
+        loadingUsers,
+        snackbarState,
         emptyRows,
         sortedRows,
         selected,
@@ -38,7 +43,11 @@ export default function EnhancedTable() {
     } = useTable();
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <Box sx={{ width: "100%" }}>
+                <Skeleton variant="rectangular" width="100%" height="450px" />
+            </Box>
+        );
     }
 
     if (error) {
@@ -107,12 +116,34 @@ export default function EnhancedTable() {
                                                 {row.email}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.last_login}
+                                                {row.last_login
+                                                    ? new Date(
+                                                          row.last_login
+                                                      ).toLocaleDateString(
+                                                          "en-US",
+                                                          {
+                                                              year: "numeric",
+                                                              month: "long",
+                                                              day: "numeric",
+                                                          }
+                                                      )
+                                                    : "No data available"}
                                             </TableCell>
+
                                             <TableCell align="left">
                                                 {row.status
                                                     ? "Active"
                                                     : "Block"}
+                                            </TableCell>
+
+                                            <TableCell
+                                                align="left"
+                                                padding="none">
+                                                {loadingUsers[row.id] ? (
+                                                    <CircularProgress
+                                                        size={24}
+                                                    />
+                                                ) : null}
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -136,6 +167,8 @@ export default function EnhancedTable() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+
+            <CustomSnackbars {...snackbarState} />
         </Box>
     );
 }

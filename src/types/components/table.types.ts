@@ -39,3 +39,5 @@ export interface TableToolbarProps {
     onBlock: () => void;
     onUnblock: () => void;
 }
+
+export type ActionType = "delete" | "block" | "unblock";
