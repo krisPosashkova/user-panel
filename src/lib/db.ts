@@ -1,12 +1,12 @@
+import { Pool } from "pg";
 import { Messages } from "@/constants/messages";
-import { Client } from "pg";
 
-let client: Client | null = null;
+let pool: Pool | null = null;
 
-export const connectToDatabase = async (): Promise<Client> => {
-    if (client) return client;
+export const connectToDatabase = async (): Promise<Pool> => {
+    if (pool) return pool;
 
-    client = new Client({
+    pool = new Pool({
         host: process.env.DATABASE_HOST,
         port: Number(process.env.DATABASE_PORT),
         user: process.env.DATABASE_USER,
@@ -15,12 +15,14 @@ export const connectToDatabase = async (): Promise<Client> => {
         ssl: {
             rejectUnauthorized: false,
         },
+        max: 10,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
     });
 
     try {
-        await client.connect();
         console.log(Messages.successConectsDB);
-        return client;
+        return pool;
     } catch (error) {
         console.error(Messages.errorConnectDB, error);
         throw new Error(Messages.errorConnectDB);
@@ -28,9 +30,9 @@ export const connectToDatabase = async (): Promise<Client> => {
 };
 
 export const disconnectFromDatabase = async () => {
-    if (client) {
-        await client.end();
-        client = null;
-        console.log("Соединение с базой данных закрыто");
+    if (pool) {
+        await pool.end();
+        pool = null;
+        console.log("Pool end");
     }
 };

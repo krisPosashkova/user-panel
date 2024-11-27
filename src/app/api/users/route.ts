@@ -3,10 +3,10 @@ import { connectToDatabase } from "@/lib/db";
 import { Messages } from "@/constants/messages";
 
 export async function GET() {
-    const client = await connectToDatabase();
+    const pool = await connectToDatabase();
 
     try {
-        const { rows } = await client.query("SELECT * FROM public.users");
+        const { rows } = await pool.query("SELECT * FROM public.users");
         console.log(rows);
         return NextResponse.json(rows, { status: 200 });
     } catch (error) {

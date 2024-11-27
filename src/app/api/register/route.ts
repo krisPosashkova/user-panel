@@ -14,23 +14,11 @@ export async function POST(req: Request) {
         );
     }
 
-    const client = await connectToDatabase();
+    const pool = await connectToDatabase();
     try {
-        const { rows: existingUser } = await client.query(
-            "SELECT * FROM public.users WHERE email = $1",
-            [email]
-        );
-
-        if (existingUser.length > 0) {
-            return NextResponse.json(
-                { message: Messages.emailExists },
-                { status: 400 }
-            );
-        }
-
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await client.query(
+        await pool.query(
             "INSERT INTO public.users (name, email, password, status) VALUES ($1, $2, $3, $4) RETURNING *",
             [name, email, hashedPassword, status]
         );
@@ -40,6 +28,14 @@ export async function POST(req: Request) {
         const message = Messages.userSuccessRegister;
         return redirectToUrl(redirectUrl, message);
     } catch (error) {
+        const dbError = error as { code?: string; message?: string };
+
+        if (dbError.code === "23505") {
+            return NextResponse.json(
+                { message: Messages.emailExists },
+                { status: 400 }
+            );
+        }
         console.error(Messages.errorCreationUser, error);
         return NextResponse.json(
             { message: Messages.errorCreationUser },

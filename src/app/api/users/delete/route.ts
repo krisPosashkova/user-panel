@@ -4,16 +4,16 @@ import { validateRequest, redirectToUrl, deleteToken } from "@/utils/server";
 import { Messages } from "@/constants/messages";
 
 export async function DELETE(request: Request) {
-    const client = await connectToDatabase();
+    const pool = await connectToDatabase();
 
     try {
-        const validationResponse = await validateRequest(client, request);
+        const validationResponse = await validateRequest(pool, request);
         if (validationResponse instanceof NextResponse)
             return validationResponse;
 
         const { userId, userIds } = validationResponse;
 
-        const result = await client.query(
+        const result = await pool.query(
             "DELETE FROM public.users WHERE id = ANY($1) RETURNING *",
             [userIds]
         );

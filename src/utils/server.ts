@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { Client } from "pg";
+import { Pool } from "pg";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Messages } from "@/constants/messages";
 
@@ -54,8 +54,8 @@ export function decodeToken(token: string): DecodedToken | null {
     }
 }
 
-export async function checkUserStatus(client: Client, userId: number) {
-    const userRes = await client.query(
+export async function checkUserStatus(pool: Pool, userId: number) {
+    const userRes = await pool.query(
         "SELECT status FROM public.users WHERE id = $1",
         [userId]
     );
@@ -85,7 +85,7 @@ export async function getDecodedToken(): Promise<DecodedToken | NextResponse> {
     return decoded;
 }
 
-export async function validateRequest(client: Client, request: Request) {
+export async function validateRequest(pool: Pool, request: Request) {
     const { userIds } = await request.json();
     if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
         return NextResponse.json(
@@ -99,7 +99,7 @@ export async function validateRequest(client: Client, request: Request) {
 
     const userId = decoded.userId;
 
-    const redirectResponse = await checkUserStatus(client, userId);
+    const redirectResponse = await checkUserStatus(pool, userId);
     if (redirectResponse) {
         return redirectResponse;
     }

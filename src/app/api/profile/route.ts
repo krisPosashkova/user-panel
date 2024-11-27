@@ -21,8 +21,8 @@ export async function GET() {
             );
         }
 
-        const dbClient = await connectToDatabase();
-        const res = await dbClient.query(
+        const pool = await connectToDatabase();
+        const res = await pool.query(
             "SELECT id, name, email FROM public.users WHERE email = $1",
             [decoded.email]
         );

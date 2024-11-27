@@ -19,9 +19,9 @@ export async function POST(request: Request) {
             );
         }
 
-        const dbClient = await connectToDatabase();
+        const pool = await connectToDatabase();
 
-        const res = await dbClient.query(
+        const res = await pool.query(
             "SELECT id, email, password, status FROM public.users WHERE email = $1",
             [email]
         );
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
             path: "/",
         });
 
-        const updateRes = await dbClient.query(
+        const updateRes = await pool.query(
             "UPDATE public.users SET last_login = now() WHERE id = $1",
             [user.id]
         );

@@ -4,10 +4,10 @@ import { validateRequest } from "@/utils/server";
 import { Messages } from "@/constants/messages";
 
 export async function PATCH(request: Request) {
-    const client = await connectToDatabase();
+    const pool = await connectToDatabase();
 
     try {
-        const validationResponse = await validateRequest(client, request);
+        const validationResponse = await validateRequest(pool, request);
         if (validationResponse instanceof NextResponse)
             return validationResponse;
 
@@ -22,7 +22,7 @@ export async function PATCH(request: Request) {
             WHERE id IN (${placeholders}) 
             RETURNING *`;
 
-        const result = await client.query(query, userIds);
+        const result = await pool.query(query, userIds);
 
         if (result.rowCount === 0) {
             return NextResponse.json(
