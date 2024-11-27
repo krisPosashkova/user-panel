@@ -14,6 +14,9 @@ export interface MessagesType {
     errorConnectDB: string;
     errorGetProfile: string;
 
+    infoDeleteYourAccount: string;
+    warningBlockYourAccount: string;
+
     errorServer: string;
     notAuthorized: string;
     invalidToken: string;

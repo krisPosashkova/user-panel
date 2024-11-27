@@ -10,6 +10,9 @@ export const Messages: MessagesType = {
         error: "Error loading the profile",
     },
     errorGetProfile: "Error Getting the profile:",
+    infoDeleteYourAccount:
+        "You have deleted your account, you can register again",
+    warningBlockYourAccount: "You have blocked your account, you cannot log in",
 
     success: "The operation was completed successfully",
     error: "Something went wrong",
