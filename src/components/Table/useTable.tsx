@@ -48,7 +48,6 @@ const useTable = () => {
                 }
 
                 const data: User[] = await response.json();
-                console.log(data);
                 setRows(createRows(data));
             } catch (err: unknown) {
                 setError(err instanceof Error ? err.message : "Unknown error");

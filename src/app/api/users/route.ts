@@ -7,7 +7,6 @@ export async function GET() {
 
     try {
         const { rows } = await pool.query("SELECT * FROM public.users");
-        console.log(rows);
         return NextResponse.json(rows, { status: 200 });
     } catch (error) {
         console.error(Messages.errorGetListUsers, error);
