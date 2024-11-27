@@ -27,7 +27,7 @@ const DynamicForm = <T extends FieldValues>({
         formState: { errors, isSubmitting },
     } = useForm<T>({
         resolver: zodResolver(schema),
-        mode: "onBlur",
+        mode: "onTouched",
     });
 
     const { snackbarState, handleSnackbar } = useSnackbarState();
