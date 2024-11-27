@@ -10,7 +10,10 @@ import {
     handleUnblockUsers as unblockUser,
 } from "@/utils/api";
 import { useSnackbarState } from "@/hooks/useSnackbarState";
+import { useProfileStore } from "@/store/profileStore";
 const useTable = () => {
+    const { profile } = useProfileStore();
+    const currentUserId = profile?.id;
     const [order, setOrder] = useState<Order>("asc");
     const [orderBy, setOrderBy] = useState<keyof User>("name");
     const [selected, setSelected] = useState<readonly number[]>([]);
@@ -23,6 +26,10 @@ const useTable = () => {
         {}
     );
     const { snackbarState, handleSnackbar } = useSnackbarState();
+    const [showWarning, setShowWarning] = useState(false);
+    const [isConfirm, setIsConfirm] = useState(false);
+    const [actionType, setActionType] = useState<ActionType>();
+    const [selectedForAction, setSelectedForAction] = useState<number[]>([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -142,6 +149,13 @@ const useTable = () => {
     };
 
     const handleAction = async (selected: number[], action: ActionType) => {
+        if (isSelected(currentUserId) && !isConfirm) {
+            setActionType(action);
+            setSelectedForAction(selected);
+            setShowWarning(true);
+            return;
+        }
+
         setLoadingUsers((prevState) => ({
             ...prevState,
             ...selected.reduce(
@@ -180,6 +194,8 @@ const useTable = () => {
                     {}
                 ),
             }));
+
+            setIsConfirm(false);
         }
     };
 
@@ -189,6 +205,23 @@ const useTable = () => {
         handleAction(selected, "block");
     const handleUnblockUsers = (selected: number[]) =>
         handleAction(selected, "unblock");
+
+    const confirmAction = () => {
+        if (actionType && selectedForAction.length) {
+            setIsConfirm(true);
+            setShowWarning(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isConfirm) {
+            handleAction(selectedForAction, actionType as ActionType);
+            setIsConfirm(false);
+        }
+    }, [isConfirm, actionType, selectedForAction]);
+
+    const isSelected = (id: number | undefined) =>
+        id !== undefined && selected.includes(id);
 
     const emptyRows =
         rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -208,6 +241,10 @@ const useTable = () => {
         error,
         snackbarState,
         loadingUsers,
+        showWarning,
+        setShowWarning,
+        isSelected,
+        confirmAction,
         handleBlockUsers,
         handleChangePage,
         handleChangeRowsPerPage,

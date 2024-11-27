@@ -16,7 +16,8 @@ import {
 import useTable from "./useTable";
 import UserTableHead from "./TableHead";
 import UserTableToolbar from "./TableToolbar";
-import CustomSnackbars from "../CustomSnackbars";
+import CustomSnackbars from "@/components/CustomSnackbars";
+import CustomDialog from "@/components/Dialog";
 
 export default function EnhancedTable() {
     const {
@@ -28,6 +29,9 @@ export default function EnhancedTable() {
         handleDeleteUsers,
         handleSelectAllClick,
         handleUnblockUsers,
+        setShowWarning,
+        confirmAction,
+        showWarning,
         loadingUsers,
         snackbarState,
         emptyRows,
@@ -167,6 +171,14 @@ export default function EnhancedTable() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+            <CustomDialog
+                showWarning={showWarning}
+                setShowWarning={setShowWarning}
+                confirmAction={confirmAction}
+                title="Warning"
+                content="You have selected yourself in this action. Are you sure
+                        you want to proceed?"
+            />
 
             <CustomSnackbars {...snackbarState} />
         </Box>
