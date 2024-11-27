@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { redirectToUrl } from "@/utils/server";
 import { Messages } from "@/constants/messages";
 
-export async function POST(request: Request) {
+export async function POST() {
     try {
         const cookieStore = await cookies();
         cookieStore.delete("token");

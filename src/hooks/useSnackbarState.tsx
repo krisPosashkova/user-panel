@@ -1,11 +1,12 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CustomSnackbarProps } from "@/types/components/snackbar.types";
-import { useSearchParams } from "next/navigation";
 import { Messages, isValidMessagesKey } from "@/constants/messages";
 
 export function useSnackbarState() {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const [snackbarState, setSnackbarState] = useState<CustomSnackbarProps>({
         severity: "info",
         message: "",
@@ -26,22 +27,7 @@ export function useSnackbarState() {
         []
     );
 
-    useEffect(() => {
-        const severity = searchParams.get(
-            "severity"
-        ) as CustomSnackbarProps["severity"];
-        const messagesKey = searchParams.get("messages");
-
-        if (severity && messagesKey && isValidMessagesKey(messagesKey)) {
-            const message = Messages[messagesKey];
-
-            if (typeof message === "string") {
-                handleSnackbar(severity, message);
-            } else {
-                console.error("Expected string, got object or other type.");
-            }
-        }
-
+    const updateParams = () => {
         const newSearchParams = new URLSearchParams(searchParams.toString());
         newSearchParams.delete("severity");
         newSearchParams.delete("messages");
@@ -51,8 +37,25 @@ export function useSnackbarState() {
                 ? window.location.pathname
                 : `${window.location.pathname}?${newSearchParams.toString()}`;
 
-        window.history.replaceState(null, "", updatedUrl);
-    }, [searchParams, handleSnackbar]);
+        router.replace(updatedUrl);
+    };
+
+    useEffect(() => {
+        const severity = searchParams.get(
+            "severity"
+        ) as CustomSnackbarProps["severity"];
+        const messagesKey = searchParams.get("messages");
+
+        if (severity && messagesKey && isValidMessagesKey(messagesKey)) {
+            const message = Messages[messagesKey];
+            if (typeof message === "string") {
+                handleSnackbar(severity, message);
+                updateParams();
+            } else {
+                console.error("Expected string, got object or other type.");
+            }
+        }
+    }, [searchParams, handleSnackbar, router]);
 
     return { snackbarState, handleSnackbar };
 }

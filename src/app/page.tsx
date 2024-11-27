@@ -1,10 +1,12 @@
+"use client";
 import React from "react";
 import Header from "@/components/Header";
 import UserTable from "@/components/Table";
 import { Box, Container, Typography, Divider } from "@mui/material";
-import Profile from "@/components/Profile";
+import { Suspense } from "react";
+import ProfileClient from "@/components/Profile/ProfileClient";
 
-export default function Home() {
+export default async function Home() {
     return (
         <div>
             <Header hasGradient={true} />
@@ -16,12 +18,14 @@ export default function Home() {
                         gap: 6,
                         mt: 10,
                     }}>
-                    <Profile />
+                    <ProfileClient />
                     <Divider component="div" role="presentation"></Divider>
                     <Typography variant="h6" component="h1">
                         List of users
                     </Typography>
-                    <UserTable />
+                    <Suspense>
+                        <UserTable />
+                    </Suspense>
                 </Box>
             </Container>
         </div>
