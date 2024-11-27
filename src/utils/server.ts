@@ -34,6 +34,11 @@ export async function getTokenOrRedirect(): Promise<string | NextResponse> {
     return token;
 }
 
+export async function deleteToken() {
+    const cookieStore = await cookies();
+    cookieStore.delete("token");
+}
+
 export function decodeToken(token: string): DecodedToken | null {
     try {
         const decoded = jwt.decode(token) as DecodedToken | null;
@@ -99,5 +104,5 @@ export async function validateRequest(client: Client, request: Request) {
         return redirectResponse;
     }
 
-    return userIds;
+    return { userIds, userId };
 }

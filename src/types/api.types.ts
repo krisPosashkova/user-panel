@@ -31,6 +31,7 @@ export interface SignUpData extends SignInData {
 
 export interface Profile extends SignUpData {
     isAuth: boolean;
+    id: number;
 }
 
 export interface User extends SignUpData {

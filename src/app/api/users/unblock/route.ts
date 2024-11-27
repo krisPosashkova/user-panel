@@ -7,8 +7,11 @@ export async function PATCH(request: Request) {
     const client = await connectToDatabase();
 
     try {
-        const userIds = await validateRequest(client, request);
-        if (userIds instanceof NextResponse) return userIds;
+        const validationResponse = await validateRequest(client, request);
+        if (validationResponse instanceof NextResponse)
+            return validationResponse;
+
+        const { userIds } = validationResponse;
 
         const placeholders = userIds
             .map((_, index) => `$${index + 1}`)

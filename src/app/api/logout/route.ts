@@ -1,13 +1,10 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { redirectToUrl } from "@/utils/server";
+import { redirectToUrl, deleteToken } from "@/utils/server";
 import { Messages } from "@/constants/messages";
 
 export async function POST() {
     try {
-        const cookieStore = await cookies();
-        cookieStore.delete("token");
-
+        deleteToken();
         const redirectUrl = "/signin";
         const message = Messages.userLoggedOut;
         return redirectToUrl(redirectUrl, message);

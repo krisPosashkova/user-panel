@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
-import { validateRequest } from "@/utils/server";
+import { validateRequest, redirectToUrl, deleteToken } from "@/utils/server";
 import { Messages } from "@/constants/messages";
 
 export async function DELETE(request: Request) {
     const client = await connectToDatabase();
 
     try {
-        const userIds = await validateRequest(client, request);
-        if (userIds instanceof NextResponse) return userIds;
+        const validationResponse = await validateRequest(client, request);
+        if (validationResponse instanceof NextResponse)
+            return validationResponse;
+
+        const { userId, userIds } = validationResponse;
 
         const result = await client.query(
             "DELETE FROM public.users WHERE id = ANY($1) RETURNING *",
@@ -20,6 +23,14 @@ export async function DELETE(request: Request) {
                 { message: Messages.notFoundUser },
                 { status: 404 }
             );
+        }
+
+        if (userIds.includes(userId)) {
+            deleteToken();
+            const redirectUrl =
+                "/signup?messages=infoDeleteYourAccount&severity=info";
+            const message = Messages.notAuthorized;
+            return redirectToUrl(redirectUrl, message);
         }
 
         return NextResponse.json(
