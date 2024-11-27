@@ -1,21 +1,13 @@
 import { NextResponse } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { connectToDatabase } from "@/lib/db";
-import { headers } from "next/headers";
 import { Messages } from "@/constants/messages";
+import { getTokenOrRedirect } from "@/utils/server";
 
 export async function GET() {
     try {
-        const headersValue = await headers();
-        const authorizationHeader = headersValue.get("Authorization");
-        const token = authorizationHeader?.split("Bearer ")[1];
-
-        if (!token) {
-            return NextResponse.json(
-                { message: Messages.notAuthorized },
-                { status: 401 }
-            );
-        }
+        const token = await getTokenOrRedirect();
+        if (typeof token !== "string") return token;
 
         const decoded = jwt.verify(
             token,

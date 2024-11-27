@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React from "react";
 import Header from "@/components/Header";
 import UserTable from "@/components/Table";
@@ -18,12 +18,12 @@ export default async function Home() {
                         gap: 6,
                         mt: 10,
                     }}>
-                    <ProfileClient />
-                    <Divider component="div" role="presentation"></Divider>
-                    <Typography variant="h6" component="h1">
-                        List of users
-                    </Typography>
                     <Suspense>
+                        <ProfileClient />
+                        <Divider component="div" role="presentation"></Divider>
+                        <Typography variant="h6" component="h1">
+                            List of users
+                        </Typography>
                         <UserTable />
                     </Suspense>
                 </Box>
