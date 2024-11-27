@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# User Management Web Application
+
+This is Next.A js user management project created using React and PostgreSQL, the database is hosted on Render. The application includes user authentication, admin panel functions.
 
 ## Getting Started
 
@@ -14,23 +16,48 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Implemented functions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   User Registration: Users can register.
+-   User Login: Users can log in and their session is maintained using the JWT token.
+-   Admin Panel: After authentication, users can view and manage the list of users.
+    Actions include:
+    -   Blocking and unblocking users
+-   Deleting users
+-   Select multiple users for batch operations (Select all/Delete all)
+-   Email Uniqueness check: A unique index in the email column in PostgreSQL ensures that there are no duplicate emails.
+-   Responsive Layout: The layout is adaptive and works easily on both desktops and mobile devices using the Material UI and Modern CSS Reset.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Technologies Used
 
-## Learn More
+Frontend: Next.js, React, Material UI, Zod
+Backend: Node.js, PostgreSQL, bcrypt, jsonwebtoken
+Database Hosting: Render
+Deploy the applicationt: Vercel [https://user-panel-one.vercel.app/]
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Веб-приложение для управления пользователями
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Это Next.js проект для управления пользователями, созданный с использованием React и PostgreSQL, база данных размещена на Render. Приложение включает в себя аутентификацию пользователей, функции панели администратора .
 
-## Deploy on Vercel
+### Реализованы функции
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-   Регистрация пользователя: Пользователи могут регистрироваться.
+-   Логин пользователя: Пользователи могут входить в систему, и их сеанс поддерживается с помощью токена JWT.
+-   Панель администратора: После аутентификации пользователи могут просматривать список пользователей и управлять им.
+    Действия включают в себя:
+    -   Блокировку и разблокировку пользователей
+-   Удаление пользователей
+-   Выбор нескольких пользователей для пакетных операций (Выбрать всех/Удалить все)
+-   Проверка уникальности электронной почты: Уникальный индекс в столбце электронной почты в PostgreSQL гарантирует отсутствие дублирующихся электронных писем.
+-   Адаптивный макет: Макет является адаптивным и легко работает как на настольных компьютерах, так и на мобильных устройствах с использованием Material UI и Modern CSS Reset.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+### Технологии
+
+Frontend: Next.js, React, Material UI, Zod
+Backend: Node.js, PostgreSQL, bcrypt, jsonwebtoken
+Database Hosting: Render
+Deploy the applicationt: Vercel [https://user-panel-one.vercel.app/]
