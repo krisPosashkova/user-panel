@@ -11,12 +11,13 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ hasGradient = false }) => {
-    const { profile } = useProfileStore();
+    const { profile, clearProfile } = useProfileStore();
 
     const isAuthenticated = profile?.isAuth ?? false;
 
     const handleLogout = async () => {
         await onLogout();
+        clearProfile();
     };
 
     return (
