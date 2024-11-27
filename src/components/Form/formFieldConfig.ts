@@ -5,13 +5,13 @@ export const signInFields = [
         name: "email",
         label: "Email",
         type: "email",
-        validation: z.string().email("Invalid email address"),
+        validation: z.string().min(1, "Email is a required field"),
     },
     {
         name: "password",
         label: "Password",
         type: "password",
-        validation: z.string().min(6, "Password must be at least 6 characters"),
+        validation: z.string().min(1, "Password is a required field"),
     },
 ];
 
